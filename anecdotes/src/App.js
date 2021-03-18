@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {
  
-  Switch, Route, Link
+  Switch, Route, Link, useRouteMatch
 } from "react-router-dom"
 
 const Menu = () => {
@@ -21,7 +21,7 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => <li key={anecdote.id}><Link to={`/anecdotes/${anecdote.id}`}  >{anecdote.content}</Link></li>)}
     </ul>
   </div>
 )
@@ -87,6 +87,17 @@ const CreateNew = (props) => {
 
 }
 
+const Anecdote =({data})=>{
+  const {id,content,votes,author,info}=data
+  return (
+    <div>
+      <h2>{content} by {author}</h2>
+      <p>has {votes} votes</p>
+      <p>for more info see {info}</p>
+    </div>
+  )
+}
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -103,7 +114,14 @@ const App = () => {
       votes: 0,
       id: '2'
     }
-  ])
+  ]) 
+  
+  const anecdoteById = (id) =>
+    anecdotes.find(a => a.id === id)
+
+  const match = useRouteMatch('/anecdotes/:id')
+
+  const anecdote = match ? anecdoteById(match.params.id) : null
 
   const [notification, setNotification] = useState('')
 
@@ -112,8 +130,7 @@ const App = () => {
     setAnecdotes(anecdotes.concat(anecdote))
   }
 
-  const anecdoteById = (id) =>
-    anecdotes.find(a => a.id === id)
+ 
 
   const vote = (id) => {
     const anecdote = anecdoteById(id)
@@ -140,7 +157,7 @@ const App = () => {
             <CreateNew addNew={addNew} />
           </Route> 
           <Route path='/anecdotes/:id'>
-            <AnecdoteList anecdotes={anecdotes} />
+            <Anecdote data={anecdote} />
           </Route>
           <Route path='/'>
             <AnecdoteList anecdotes={anecdotes} />
