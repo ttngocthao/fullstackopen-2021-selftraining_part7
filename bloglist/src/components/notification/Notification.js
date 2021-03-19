@@ -1,8 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
+const Notification = () => {
 
-const Notification = ({ successful,message }) => {
+  const notification = useSelector(state => state.notification)
+  const { successful,message } = notification
+
   const styles ={
     color: successful ? 'green': 'red',
     borderRadius:'5px',
@@ -17,9 +21,6 @@ const Notification = ({ successful,message }) => {
   )
 }
 
-Notification.propTypes ={
-  successful: PropTypes.bool.isRequired,
-  message: PropTypes.string.isRequired
-}
+// Notification.propTypes ={}
 
 export default Notification

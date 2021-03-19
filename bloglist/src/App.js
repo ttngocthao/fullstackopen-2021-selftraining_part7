@@ -1,4 +1,5 @@
 import React,{ useEffect, useState } from 'react'
+import { useDispatch,useSelector } from 'react-redux'
 import loginService from './services/login'
 import blogService from './services/blogs'
 
@@ -6,15 +7,13 @@ import BlogForm from './components/blogForm/BlogForm'
 import LoginForm from './components/loginForm/LoginForm'
 import Blogs from './components/blogs/Blogs'
 import Notification from './components/notification/Notification'
-
+import { setNotification } from './reducers/notification.reducer'
 
 function App() {
 
+  const dispatch = useDispatch()
+  const notification = useSelector(state => state.notification)
 
-  const [notification, setNotification] = useState({
-    message:null,
-    successful:null
-  })
 
   const [user,setUser] = useState(null)
   const [blogs,setBlogs]=useState([])
@@ -41,18 +40,7 @@ function App() {
   }
 
 
-  const showNotification =(messageContent,successfulMode) => {
-    setNotification({
-      message: messageContent,
-      successful: successfulMode
-    })
-    setTimeout(() => {
-      setNotification({
-        message:null,
-        successful:null
-      })
-    },5000)
-  }
+
 
   const handleLogin =async({ username,password }) => {
     try {
@@ -73,7 +61,8 @@ function App() {
        * ! Access error message from server
        * ! error.response.data.error
        */
-      showNotification(error.response.data.error,false)
+
+      dispatch(setNotification(error.response.data.error,5,'failed'))
 
     }
   }
@@ -89,11 +78,14 @@ function App() {
       const res = await blogService.create(newBlogObj)
       const allBlogs = await blogService.getAll()
       setBlogs(sortList(allBlogs,'likes','des'))
-      showNotification(`A new blog ${res.title} by ${res.author} was added`,true)
+
+      dispatch(setNotification(`A new blog ${res.title} by ${res.author} was added`,5))
 
     } catch (error) {
       console.log(error)
-      showNotification(error.response.data.error,false)
+
+      dispatch(setNotification(error.response.data.error,5,'failed'))
+
 
     }
   }
@@ -103,9 +95,11 @@ function App() {
       const res =await blogService.update(id,updatedBlog)
       const updatedBlogs = blogs.map(blog => blog.id!==id ? blog : { ...blog,likes: res.likes } )
       setBlogs(sortList(updatedBlogs,'likes','des'))
-      showNotification('Post has successfully updated',true)
+
+      dispatch(setNotification('Post has successfully updated',5))
     } catch (error) {
       console.log(error)
+      dispatch(setNotification(error.response.data.error,5,'failed'))
     }
   }
 
@@ -114,11 +108,15 @@ function App() {
       await blogService.remove(id)
       const blogs = await blogService.getAll()
       setBlogs(sortList(blogs,'likes','des'))
-      showNotification(`Blog ${title} by ${author} was successfully deleted`,true)
+
+
+      dispatch(setNotification(`Blog ${title} by ${author} was successfully deleted`,5))
+
 
     } catch (error) {
       console.log(error)
-      showNotification(error.response.data.error,false)
+
+      dispatch(setNotification(error.response.data.error,5,'failed'))
     }
 
   }
@@ -148,8 +146,8 @@ function App() {
     <div>
       <h1>Blog</h1>
 
-      {notification.message!==null && notification.successful!==null &&
-        <Notification message={notification.message} successful={notification.successful}/>}
+
+      {notification.visible && <Notification/>}
 
       {!user && <LoginForm handleLogin={handleLogin}/>}
 
