@@ -1,9 +1,13 @@
 import React,{ useState, useRef } from 'react'
 import Togglable from '../togglable/Togglable'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../../reducers/blogs.reducer'
+import { setNotification } from '../../reducers/notification.reducer'
 
 
-const BlogForm = ({ handleAddBlog }) => {
+const BlogForm = () => {
+  const dispatch = useDispatch()
   const blogFormRef = useRef()
   const [title,setTitle]= useState('')
   const [author,setAuthor]= useState('')
@@ -11,7 +15,20 @@ const BlogForm = ({ handleAddBlog }) => {
 
   const addBlog =(e) => {
     e.preventDefault()
-    handleAddBlog({ title,author,url })
+
+    try {
+      // const res = await blogService.create(newBlogObj)
+      // const allBlogs = await blogService.getAll()
+      // setBlogs(sortList(allBlogs,'likes','des'))
+      dispatch(createBlog({ title,author,url }))
+      dispatch(setNotification(`A new blog ${title} by ${author} was added`,5))
+
+    } catch (error) {
+      console.log(error)
+      dispatch(setNotification(error.response.data.error,5,'failed'))
+
+
+    }
     setTitle('')
     setAuthor('')
     setUrl('')
@@ -59,8 +76,6 @@ const BlogForm = ({ handleAddBlog }) => {
   )
 }
 
-BlogForm.propTypes = {
-  handleAddBlog: PropTypes.func.isRequired
-}
+BlogForm.propTypes = {}
 
 export default BlogForm

@@ -8,6 +8,7 @@ import LoginForm from './components/loginForm/LoginForm'
 import Blogs from './components/blogs/Blogs'
 import Notification from './components/notification/Notification'
 import { setNotification } from './reducers/notification.reducer'
+// import { createBlog } from './reducers/blogs.reducer'
 
 function App() {
 
@@ -73,22 +74,6 @@ function App() {
     setUser(null)
   }
 
-  const handleAddBlog =async(newBlogObj) => {
-    try {
-      const res = await blogService.create(newBlogObj)
-      const allBlogs = await blogService.getAll()
-      setBlogs(sortList(allBlogs,'likes','des'))
-
-      dispatch(setNotification(`A new blog ${res.title} by ${res.author} was added`,5))
-
-    } catch (error) {
-      console.log(error)
-
-      dispatch(setNotification(error.response.data.error,5,'failed'))
-
-
-    }
-  }
 
   const handleUpdateBlog = async(id,updatedBlog) => {
     try {
@@ -122,16 +107,7 @@ function App() {
   }
 
 
-  useEffect(() => {
-    // if(user){
-    (async() => {
-      const blogs = await blogService.getAll()
 
-      setBlogs(sortList(blogs,'likes','des'))
-    })()
-    // }
-
-  },[])//?get all blog posts
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -156,13 +132,12 @@ function App() {
           <div>{user.username} logged in <button onClick={handleLogout}>Logout</button></div>
           <br/>
 
-          <BlogForm handleAddBlog={handleAddBlog} />
+          <BlogForm/>
 
 
           <br/>
 
           <Blogs
-            blogs={blogs}
             handleUpdateBlog={handleUpdateBlog}
             user={user}
             handleDeleteBlog={handleDeleteBlog}

@@ -6,6 +6,8 @@
 7.6 to 7.7 - 1 hour
 7.8 - 30 mins
 7.9 - 30 mins
+7.10 - 30 mins
+
 //set up redux
 install dependencies npm install redux react-redux redux-thunk redux-devtools-extension
 create a store.js in src

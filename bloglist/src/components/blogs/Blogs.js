@@ -1,9 +1,16 @@
-import React from 'react'
+import React,{ useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import BlogPost from './BlogPost'
+import { useDispatch, useSelector } from 'react-redux'
+import { initBlogs } from '../../reducers/blogs.reducer'
 
-const Blogs = ({ blogs,handleUpdateBlog,user,handleDeleteBlog }) => {
+const Blogs = ({ handleUpdateBlog,user,handleDeleteBlog }) => {
+  const blogs = useSelector(state => state.blogs)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(initBlogs())
+  },[dispatch])
   return (
     <div id='blogList'>
       {blogs.length===0 ? 'No blog posted' : blogs.map(blog => {
@@ -27,7 +34,7 @@ const Blogs = ({ blogs,handleUpdateBlog,user,handleDeleteBlog }) => {
 }
 
 Blogs.propTypes ={
-  blogs: PropTypes.array.isRequired,
+
   handleUpdateBlog: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   handleDeleteBlog: PropTypes.func.isRequired
