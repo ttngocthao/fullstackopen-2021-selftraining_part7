@@ -1,9 +1,11 @@
 import React,{ useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { removeBlog, updateBlog } from '../../reducers/blogs.reducer'
+import { setNotification } from '../../reducers/notification.reducer'
 
-
-const BlogPost = ({ blog,handleUpdateBlog,postOwner,handleDeleteBlog }) => {
-
+const BlogPost = ({ blog,postOwner }) => {
+  const dispatch = useDispatch()
   const [viewDetail,setViewDetail] = useState(false)
 
   const handleViewDetailClick = () => {
@@ -11,13 +13,20 @@ const BlogPost = ({ blog,handleUpdateBlog,postOwner,handleDeleteBlog }) => {
   }
 
   const handleLikeClick =() => {
-    handleUpdateBlog(blog.id,{ likes: blog.likes+1 })
+
+    const updatedBlog = { likes: blog.likes+1 }
+    dispatch(updateBlog(blog.id,updatedBlog))
+    dispatch(setNotification('You have liked the post',5))
+
+    //  dispatch(setNotification(error.response.data.error,5,'failed'))
+
   }
 
   const handleRemoveClick =() => {
     const result = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
     if(result){
-      handleDeleteBlog(blog.id,blog.title,blog.author)
+      dispatch(removeBlog(blog.id))
+      dispatch(setNotification(`Blog ${blog.title} by ${blog.author} was successfully deleted`,5))
     }
   }
 
@@ -37,9 +46,7 @@ const BlogPost = ({ blog,handleUpdateBlog,postOwner,handleDeleteBlog }) => {
 
 BlogPost.propTypes = {
   blog: PropTypes.object.isRequired,
-  handleUpdateBlog: PropTypes.func.isRequired,
   postOwner: PropTypes.bool.isRequired,
-  handleDeleteBlog: PropTypes.func.isRequired
 }
 
 export default BlogPost

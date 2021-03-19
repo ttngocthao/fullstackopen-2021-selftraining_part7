@@ -8,7 +8,7 @@ import LoginForm from './components/loginForm/LoginForm'
 import Blogs from './components/blogs/Blogs'
 import Notification from './components/notification/Notification'
 import { setNotification } from './reducers/notification.reducer'
-// import { createBlog } from './reducers/blogs.reducer'
+
 
 function App() {
 
@@ -17,28 +17,27 @@ function App() {
 
 
   const [user,setUser] = useState(null)
-  const [blogs,setBlogs]=useState([])
 
-  const sortList =(listArr,sortCriteria='id',order='asc') => {
-    listArr.sort((a, b) => {
-      const itemA = a[sortCriteria]
-      const itemB = b[sortCriteria]
-      let comparison = 0
-      if (itemA > itemB) {
-        comparison = 1
-      }
-      if (itemA < itemB) {
-        comparison = -1
-      }
-      if(order==='des'){
-        return comparison * -1
-      }else{
-        return comparison
-      }
+  // const sortList =(listArr,sortCriteria='id',order='asc') => {
+  //   listArr.sort((a, b) => {
+  //     const itemA = a[sortCriteria]
+  //     const itemB = b[sortCriteria]
+  //     let comparison = 0
+  //     if (itemA > itemB) {
+  //       comparison = 1
+  //     }
+  //     if (itemA < itemB) {
+  //       comparison = -1
+  //     }
+  //     if(order==='des'){
+  //       return comparison * -1
+  //     }else{
+  //       return comparison
+  //     }
 
-    })
-    return listArr
-  }
+  //   })
+  //   return listArr
+  // }
 
 
 
@@ -75,37 +74,6 @@ function App() {
   }
 
 
-  const handleUpdateBlog = async(id,updatedBlog) => {
-    try {
-      const res =await blogService.update(id,updatedBlog)
-      const updatedBlogs = blogs.map(blog => blog.id!==id ? blog : { ...blog,likes: res.likes } )
-      setBlogs(sortList(updatedBlogs,'likes','des'))
-
-      dispatch(setNotification('Post has successfully updated',5))
-    } catch (error) {
-      console.log(error)
-      dispatch(setNotification(error.response.data.error,5,'failed'))
-    }
-  }
-
-  const handleDeleteBlog = async(id,title,author) => {
-    try {
-      await blogService.remove(id)
-      const blogs = await blogService.getAll()
-      setBlogs(sortList(blogs,'likes','des'))
-
-
-      dispatch(setNotification(`Blog ${title} by ${author} was successfully deleted`,5))
-
-
-    } catch (error) {
-      console.log(error)
-
-      dispatch(setNotification(error.response.data.error,5,'failed'))
-    }
-
-  }
-
 
 
 
@@ -138,9 +106,9 @@ function App() {
           <br/>
 
           <Blogs
-            handleUpdateBlog={handleUpdateBlog}
+
             user={user}
-            handleDeleteBlog={handleDeleteBlog}
+
           />
 
         </>

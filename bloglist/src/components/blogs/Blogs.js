@@ -5,7 +5,7 @@ import BlogPost from './BlogPost'
 import { useDispatch, useSelector } from 'react-redux'
 import { initBlogs } from '../../reducers/blogs.reducer'
 
-const Blogs = ({ handleUpdateBlog,user,handleDeleteBlog }) => {
+const Blogs = ({ handleUpdateBlog,user }) => {
   const blogs = useSelector(state => state.blogs)
   const dispatch = useDispatch()
   useEffect(() => {
@@ -23,7 +23,7 @@ const Blogs = ({ handleUpdateBlog,user,handleDeleteBlog }) => {
             blog={blog}
             handleUpdateBlog={handleUpdateBlog}
             postOwner={user.username===blog.user.username ? true : false}
-            handleDeleteBlog={handleDeleteBlog}
+
           />
 
         )
@@ -34,10 +34,8 @@ const Blogs = ({ handleUpdateBlog,user,handleDeleteBlog }) => {
 }
 
 Blogs.propTypes ={
-
   handleUpdateBlog: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  handleDeleteBlog: PropTypes.func.isRequired
 }
 
 export default Blogs
