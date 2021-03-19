@@ -5,3 +5,16 @@
 7.5 - 15mins
 7.6 to 7.7 - 1 hour
 7.8 - 30 mins
+7.9
+//set up redux
+install dependencies npm install redux react-redux redux-thunk redux-devtools-extension
+create a store.js in src
+wrap app in provider with store in index.js
+create reducer from combineReducers in store.js
+create store with reducer and redux-thunk in store.js
+create single reducers in a folder called reducers
+FOR EACH REDUCER
+define initialState
+define reducer(state=initialState,action) function
+export default the reducer
+--> action creator function should be defined in here too in future.
