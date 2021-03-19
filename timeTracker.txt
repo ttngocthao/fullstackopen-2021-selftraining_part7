@@ -9,6 +9,7 @@
 7.10 - 30 mins
 7.11 - 30 mins
 7.12 - 45 mins
+7.13 - 60 mins
 
 //set up redux
 install dependencies npm install redux react-redux redux-thunk redux-devtools-extension
@@ -22,3 +23,7 @@ define initialState
 define reducer(state=initialState,action) function
 export default the reducer
 --> action creator function should be defined in here too in future.
+
+//set up react router dom
+in index.js wrap <App/> in <Router/>
+in App.js use <Switch/> and <Route/> to define path and component

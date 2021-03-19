@@ -1,13 +1,13 @@
 import React,{ useEffect } from 'react'
+import { Switch, Route } from 'react-router-dom'
 import { useDispatch,useSelector } from 'react-redux'
 
-//import blogService from './services/blogs'
-
-import BlogForm from './components/blogForm/BlogForm'
+//import BlogForm from './components/blogForm/BlogForm'
 import LoginForm from './components/loginForm/LoginForm'
-import Blogs from './components/blogs/Blogs'
+//import Blogs from './components/blogs/Blogs'
 import Notification from './components/notification/Notification'
-import { initUser, logout } from './reducers/users.reducer'
+import { initUser, logout } from './reducers/auth.reducer'
+import Users from './components/users/Users'
 
 
 
@@ -15,44 +15,12 @@ function App() {
   const dispatch = useDispatch()
 
   const notification = useSelector(state => state.notification)
-  const user = useSelector (state => state.users.user)
-
-
-
-  // const sortList =(listArr,sortCriteria='id',order='asc') => {
-  //   listArr.sort((a, b) => {
-  //     const itemA = a[sortCriteria]
-  //     const itemB = b[sortCriteria]
-  //     let comparison = 0
-  //     if (itemA > itemB) {
-  //       comparison = 1
-  //     }
-  //     if (itemA < itemB) {
-  //       comparison = -1
-  //     }
-  //     if(order==='des'){
-  //       return comparison * -1
-  //     }else{
-  //       return comparison
-  //     }
-
-  //   })
-  //   return listArr
-  // }
-
-
-
-
-
+  const user = useSelector (state => state.auth.user)
 
   const handleLogout =(e) => {
     e.preventDefault()
     dispatch(logout())
   }
-
-
-
-
 
   useEffect(() => {
     dispatch(initUser())
@@ -65,11 +33,11 @@ function App() {
 
       {notification.visible && <Notification/>}
 
-      {!user && <LoginForm />}
+      {!user ? <LoginForm /> :   <div>{user.username} logged in <button onClick={handleLogout}>Logout</button></div>}
 
-      {user && user.token &&
+      {/* {user && user.token &&
         <>
-          <div>{user.username} logged in <button onClick={handleLogout}>Logout</button></div>
+
           <br/>
 
           <BlogForm/>
@@ -80,7 +48,12 @@ function App() {
           <Blogs/>
 
         </>
-      }
+      }*/}
+      <Switch>
+        <Route path='/users'>
+          <Users/>
+        </Route>
+      </Switch>
     </div>
   )
 }

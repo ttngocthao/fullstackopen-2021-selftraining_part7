@@ -6,7 +6,7 @@ import { setNotification } from '../../reducers/notification.reducer'
 
 const BlogPost = ({ blog }) => {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.users.user)
+  const user = useSelector(state => state.auth.user)
   const [viewDetail,setViewDetail] = useState(false)
   const  postOwner= user.username===blog.user.username ? true : false
 
