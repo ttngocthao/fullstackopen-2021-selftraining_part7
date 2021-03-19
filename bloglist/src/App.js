@@ -1,22 +1,23 @@
-import React,{ useEffect, useState } from 'react'
+import React,{ useEffect } from 'react'
 import { useDispatch,useSelector } from 'react-redux'
-import loginService from './services/login'
-import blogService from './services/blogs'
+
+//import blogService from './services/blogs'
 
 import BlogForm from './components/blogForm/BlogForm'
 import LoginForm from './components/loginForm/LoginForm'
 import Blogs from './components/blogs/Blogs'
 import Notification from './components/notification/Notification'
-import { setNotification } from './reducers/notification.reducer'
+import { initUser, logout } from './reducers/users.reducer'
+
 
 
 function App() {
-
   const dispatch = useDispatch()
+
   const notification = useSelector(state => state.notification)
+  const user = useSelector (state => state.users.user)
 
 
-  const [user,setUser] = useState(null)
 
   // const sortList =(listArr,sortCriteria='id',order='asc') => {
   //   listArr.sort((a, b) => {
@@ -42,35 +43,11 @@ function App() {
 
 
 
-  const handleLogin =async({ username,password }) => {
-    try {
 
-      const user = await loginService.login({
-        username, password
-      })
-
-      //? save user info to local storage
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-      blogService.setToken(user.token) //to use in create a new blog post
-      setUser(user)
-
-    } catch (error) {
-      /**
-       * ! Access error message from server
-       * ! error.response.data.error
-       */
-
-      dispatch(setNotification(error.response.data.error,5,'failed'))
-
-    }
-  }
 
   const handleLogout =(e) => {
     e.preventDefault()
-    window.localStorage.clear()
-    setUser(null)
+    dispatch(logout())
   }
 
 
@@ -78,13 +55,8 @@ function App() {
 
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  },[])//?get user info and token from locals storage if available.
+    dispatch(initUser())
+  },[])
 
   return (
     <div>
@@ -93,7 +65,7 @@ function App() {
 
       {notification.visible && <Notification/>}
 
-      {!user && <LoginForm handleLogin={handleLogin}/>}
+      {!user && <LoginForm />}
 
       {user && user.token &&
         <>
@@ -105,11 +77,7 @@ function App() {
 
           <br/>
 
-          <Blogs
-
-            user={user}
-
-          />
+          <Blogs/>
 
         </>
       }

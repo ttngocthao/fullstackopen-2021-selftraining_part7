@@ -1,19 +1,20 @@
 import React,{ useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { removeBlog, updateBlog } from '../../reducers/blogs.reducer'
 import { setNotification } from '../../reducers/notification.reducer'
 
-const BlogPost = ({ blog,postOwner }) => {
+const BlogPost = ({ blog }) => {
   const dispatch = useDispatch()
+  const user = useSelector(state => state.users.user)
   const [viewDetail,setViewDetail] = useState(false)
+  const  postOwner= user.username===blog.user.username ? true : false
 
   const handleViewDetailClick = () => {
     setViewDetail(!viewDetail)
   }
 
   const handleLikeClick =() => {
-
     const updatedBlog = { likes: blog.likes+1 }
     dispatch(updateBlog(blog.id,updatedBlog))
     dispatch(setNotification('You have liked the post',5))
@@ -46,7 +47,7 @@ const BlogPost = ({ blog,postOwner }) => {
 
 BlogPost.propTypes = {
   blog: PropTypes.object.isRequired,
-  postOwner: PropTypes.bool.isRequired,
+
 }
 
 export default BlogPost
