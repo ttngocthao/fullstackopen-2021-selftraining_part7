@@ -51,13 +51,11 @@ const Footer = () => (
 
 const CreateNew = (props) => {
   const history = useHistory()
- // const [content, setContent] = useState('')
- // const [author, setAuthor] = useState('')
- // const [info, setInfo] = useState('')
- const content = useField('text')
- const author = useField('text')
- const info = useField('text')
-    //const field = useField('text')
+ 
+  const content = useField('text')
+  const author = useField('text')
+  const info = useField('text')
+    
   
 
 
@@ -71,11 +69,15 @@ const CreateNew = (props) => {
     })
     history.push('/')
   }
-
+  const handleReset =()=>{
+    content.resetField()
+    author.resetField()
+    info.resetField()
+  }
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div>
           content
           <input name='content' type={content.type} value={content.value} onChange={content.onChange} />
@@ -88,7 +90,7 @@ const CreateNew = (props) => {
           url for more info
           <input name='info' type={info.type} value={info.value} onChange={info.onChange} />
         </div>
-        <button>create</button>
+        <button onClick={handleSubmit}>create</button><button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
@@ -135,8 +137,7 @@ const App = () => {
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
-    console.log(anecdote)
-    debugger
+  
     setAnecdotes(anecdotes.concat(anecdote))
     setNotification(`a new anecdote ${anecdote.content} created!`)
     setTimeout(()=>{
