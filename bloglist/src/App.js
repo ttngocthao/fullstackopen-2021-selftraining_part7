@@ -46,12 +46,7 @@ function App() {
 
       {notification.visible && <Notification/>}
 
-      {/* {user && <div>
-        {user.username} logged in <button onClick={handleLogout}>Logout</button>
-
-      </div>} */}
       {user && <Navigation/>}
-
 
       <Switch>
         <Route path='/users/:id' >
