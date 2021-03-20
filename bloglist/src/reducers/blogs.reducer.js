@@ -59,4 +59,14 @@ export const updateBlog =(id,updatedBlogObj) => {
   }
 }
 
+// export const viewBlog =(id) => {
+//   return async dispatch => {
+//     const blog = await blogsService.getById(id)
+//     dispatch({
+//       type: 'VIEW_BLOG',
+//       data: blog
+//     })
+//   }
+// }
+
 export default blogsReducer
