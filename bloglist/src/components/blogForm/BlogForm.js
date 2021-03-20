@@ -4,7 +4,8 @@ import Togglable from '../togglable/Togglable'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../../reducers/blogs.reducer'
 import { setNotification } from '../../reducers/notification.reducer'
-
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 const BlogForm = () => {
   const dispatch = useDispatch()
@@ -37,40 +38,35 @@ const BlogForm = () => {
 
   return (
     <Togglable buttonLabel='New Blog' ref={blogFormRef}>
-      <form onSubmit={addBlog}>
+      <Form onSubmit={addBlog}>
         <h2>Creat new</h2>
-        <div>
-                Title:
-          <input
-            type='text'
-            value={title}
+        <Form.Group>
+          <Form.Label>Title:</Form.Label>
+          <Form.Control type='text'  value={title}
             name='title'
             id='title'
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div>
-                Author:
-          <input
-            type='text'
+            onChange={(e) => setTitle(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Author:</Form.Label>
+          <Form.Control type='text'
             value={author}
             name='author'
             id='author'
-            onChange={(e) => setAuthor(e.target.value)}
-          />
-        </div>
-        <div>
-                Url:
-          <input
-            type='text'
+            onChange={(e) => setAuthor(e.target.value)}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Url:</Form.Label>
+          <Form.Control type='text'
             value={url}
             name='url'
             id='url'
-            onChange={(e) => setUrl(e.target.value)}
-          />
-        </div>
-        <button id='createNewBlogBtn' type='submit'>Create</button>
-      </form>
+            onChange={(e) => setUrl(e.target.value)}/>
+        </Form.Group>
+        <Button variant='primary' id='createNewBlogBtn' type='submit'>
+          Create
+        </Button>
+      </Form>
     </Togglable>
 
   )

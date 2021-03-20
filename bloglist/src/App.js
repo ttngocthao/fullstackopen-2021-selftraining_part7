@@ -14,6 +14,8 @@ import User from './components/users/User'
 import BlogView from './components/blogs/BlogView'
 import Navigation from './components/navigation/Navigation'
 
+import Container from 'react-bootstrap/Container'
+
 
 function App() {
   const dispatch = useDispatch()
@@ -40,7 +42,7 @@ function App() {
 
 
   return (
-    <div>
+    <Container fluid>
       <h1>Blog</h1>
 
 
@@ -67,7 +69,7 @@ function App() {
             <Blogs/></Fragment> : <Redirect to='/login'/>}
         </Route>
       </Switch>
-    </div>
+    </Container>
   )
 }
 
