@@ -4,6 +4,8 @@ import { useRouteMatch } from 'react-router'
 import { Link } from 'react-router-dom'
 import { updateBlog } from '../../reducers/blogs.reducer'
 import { setNotification } from '../../reducers/notification.reducer'
+import CommentForm from '../comments/CommentForm'
+import Comments from '../comments/Comments'
 
 const BlogView = () => {
   const blogs = useSelector(state => state.blogs)
@@ -28,12 +30,8 @@ const BlogView = () => {
         <p>{blog.likes} likes <button onClick={handleLikeClick}>like</button></p>
         <p>added by {blog.user.name}</p>
       </div>
-      <div>
-        <h3>Comments</h3>
-        <ul>
-          {blog.comments.length===0 ? <li>No comment has been made</li> : blog.comments.map((c,i) => <li key={i}>{c}</li>)}
-        </ul>
-      </div>
+      <CommentForm blog={blog}/>
+      <Comments blog={blog}/>
     </div>
   )
 }
